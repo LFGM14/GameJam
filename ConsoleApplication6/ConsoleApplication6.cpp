@@ -6,7 +6,7 @@ using namespace System;
 using namespace std;
 
 const int SCREEN_WIDTH = 110;
-const int SCREEN_HEIGHT = 50;
+const int SCREEN_HEIGHT = 40;
 
 void setxy(float x, int y) {
     Console::SetCursorPosition(x, y);
@@ -154,13 +154,38 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
     cout << " *** ";
 }
 
-void floor(float& x, int y) {
-    setxy(x, y);
-    for (int i = 0; x < SCREEN_WIDTH; i++) {
-        for (int j = 0; j > 2; j++) {
-            cout << char(219);
-        }
+void timerCount() {
+    int* centisegundos;
+    centisegundos = 0;
+    centisegundos++;
+
+}
+
+void drawGround() {
+    setxy(0, SCREEN_HEIGHT - 2);
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        cout << (char)219;
     }
+    setxy(0, SCREEN_HEIGHT - 3);
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        cout << (char)219;
+    }
+    setxy(0, SCREEN_HEIGHT - 4);
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        cout << (char)30;
+    }
+
+
+    // Agregar contadores u otra información que desees mostrar
+    setxy(5, SCREEN_HEIGHT - 1);
+    cout << "Muestras: 0/4"; // Puedes reemplazar esto con el contador real de muestras recolectadas
+    setxy(35, SCREEN_HEIGHT - 1);
+    cout << "Velocidad: X"; // Puedes mostrar la velocidad actual aquí
+}
+
+void drawSample(float x) {
+    setxy(x, SCREEN_HEIGHT - 5);
+    cout << (char)15;
 }
 
 
@@ -189,12 +214,16 @@ void shipGame() {
     float x3 = 1, dx3 = aleatorio();
     int y3 = 25;
     float xFloor = 0; int yFloor = 35;
+    float xSample1 = 15, xSample2 = 50, xSample3 = 85, xSample4 = 105;
 
     int direction1 = 1;
     int direction2 = 1;
     int direction3 = 1;
 
-    
+    drawSample(xSample1);
+    drawSample(xSample2);
+    drawSample(xSample3);
+    drawSample(xSample4);
 
     while (1) {
         delAst(x1, y1);
@@ -224,13 +253,14 @@ void shipGame() {
         }
 
         astDrawing(x1, x2, x3, y1, y2, y3);
+        
 
         if (checkCollision(x, x1, y, y1) || checkCollision(x, x2, y, y2) || checkCollision(x, x3, y, y3) || checkCollision(x, xEst1, y, yEst1) || checkCollision(x, xEst2, y, yEst1) || checkCollision(x, xEst3, y, yEst2) || checkCollision(x, xEst4, y, yEst2)) {
             // cuando la nave se choque con los asteroides, se regresa a la posición inicial
             x = 10;
             y = 0;
         }
-
+        drawGround();
         _sleep(10);
     }
 }
