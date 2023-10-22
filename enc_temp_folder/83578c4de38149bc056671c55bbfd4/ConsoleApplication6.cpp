@@ -178,16 +178,9 @@ void drawGround() {
     // Agregar contadores u otra información que desees mostrar
     setxy(5, SCREEN_HEIGHT - 1);
     cout << "Muestras: 0/4"; // Puedes reemplazar esto con el contador real de muestras recolectadas
-
-    setxy(70, SCREEN_HEIGHT - 1);
-
-    cout << "Asteroides: 7"; //contador de asteroides 
-
     setxy(80, SCREEN_HEIGHT - 1);
 
     cout << "Tiempo: " << SEGUNDOS << "s"; //contador de tiempo
-
-    
 }
 
 void drawSafeZone() {
@@ -232,7 +225,6 @@ void shipGame() {
     int y3 = 25;
     float xFloor = 0; int yFloor = 35;
     float xSample1 = 15, xSample2 = 50, xSample3 = 85, xSample4 = 105; int ySample = SCREEN_HEIGHT - 5;
-    int sampleCounter = 0;
 
     int direction1 = 1;
     int direction2 = 1;
@@ -273,8 +265,6 @@ void shipGame() {
             direction3 *= -1;
         }
 
-
-
         astDrawing(x1, x2, x3, y1, y2, y3);
         
 
@@ -284,12 +274,6 @@ void shipGame() {
             y = 0;
             
         }
-        //contador de muestras
-        if (checkCollision(x, xSample1, y, ySample) || checkCollision(x, xSample2, y, ySample) || checkCollision(x, xSample3, y, ySample) || checkCollision(x, xSample4, y, ySample)) {
-            sampleCounter++;
-        }
-
-
         MILISEGUNDOS++;
         if (MILISEGUNDOS == 26) { //es lo más cercano que encontramos a un segundo
             SEGUNDOS++;
