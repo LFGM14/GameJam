@@ -48,9 +48,9 @@ void startScreen() {
     setxy(25, 15);
     cout << "-Recolecta las 4 muestras de tierra marciana.";
     setxy(25, 17);
-    cout << "-No choques con los asteroides. Si lo haces, perderas automaticamente.";
+    cout << "-No choques con los asteroides. Si lo haces, perderás automáticamente.";
     setxy(25, 19);
-    cout << "-Tendras naves de velocidades distintas dependiendo de tu partida,";
+    cout << "-Tendrás naves de velocidades distintas dependiendo de tu partida,";
     setxy(25, 21);
     cout << "utiliza tu velocidad a tu ventaja.";
     system("pause>0");
@@ -62,12 +62,11 @@ void credits() {
     setxy(35, 10);
     cout << "Proyecto hecho por: ";
     setxy(25, 13);
-    cout << "-Stephanie V�squez Zamora";
+    cout << "-Stephanie Vásquez Zamora";
     setxy(25, 17);
     cout << "-Luis Gonzales Matute";
     system("pause>0");
     system("cls");
-
 }
 
 void delShip(float& x, int& y) {
@@ -87,7 +86,7 @@ void shipMovement(float& x, int& y) {
             }
         }
         if (c == 'd' || c == 'D') {
-            if (x < SCREEN_WIDTH - 11) {
+            if (x < SCREEN_WIDTH - 13) {
                 x++;
             }
         }
@@ -155,19 +154,10 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
     cout << " *** ";
 }
 
-void floor(float& x,int y) {
-    setxy(x,y);
-    for (int i = 0; x < SCREEN_WIDTH; i++) {
-        for (int j = 0; j < 2; j++) {
-            cout << char(219);
-        }
-    }
-}
-
 bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (x + i >= asteroidX && x + i <= asteroidX + 3 && y + j >= asteroidY && y + j <= asteroidY + 2) {
+    for (int i = 0; i < 13; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (x + i >= asteroidX && x + i <= asteroidX + 4 && y + j >= asteroidY && y + j <= asteroidY + 2) {
                 return true;  // Colisión detectada
             }
         }
@@ -178,7 +168,7 @@ bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
 void shipGame() {
     float x = 10;
     int y = 0;
-    float xEst1 = 12, xEst2 = 60; int yEst1 = 11;
+    float xEst1 = 18, xEst2 = 60; int yEst1 = 11;
     float xEst3 = 15, xEst4 = 85; int yEst2 = 21;
     float x1 = 1, dx1 = aleatorio();
     int y1 = 5;
@@ -207,22 +197,22 @@ void shipGame() {
         x2 += dx2 * direction2;
         x3 += dx3 * direction3;
 
-        if (x1 <= 0 || x1 >= SCREEN_WIDTH - 7) {
+        if (x1 <= 0 || x1 >= SCREEN_WIDTH - 5) {
             direction1 *= -1;
         }
 
-        if (x2 <= 0 || x2 >= SCREEN_WIDTH - 7) {
+        if (x2 <= 0 || x2 >= SCREEN_WIDTH - 5) {
             direction2 *= -1;
         }
 
-        if (x3 <= 0 || x3 >= SCREEN_WIDTH - 7) {
+        if (x3 <= 0 || x3 >= SCREEN_WIDTH - 5) {
             direction3 *= -1;
         }
 
         astDrawing(x1, x2, x3, y1, y2, y3);
 
         if (checkCollision(x, x1, y, y1) || checkCollision(x, x2, y, y2) || checkCollision(x, x3, y, y3) || checkCollision(x, xEst1, y, yEst1) || checkCollision(x, xEst2, y, yEst1) || checkCollision(x, xEst3, y, yEst2) || checkCollision(x, xEst4, y, yEst2)) {
-            // esto es para que cuando la nave se choque con los asteroides, se regrese a la posicion inicial PERO NO FUNCIONA LA HUEVADA
+            // cuando la nave se choque con los asteroides, se regresa a la posición inicial
             x = 10;
             y = 0;
         }
@@ -235,6 +225,7 @@ int main() {
     Console::CursorVisible = false;
     srand(time(NULL));
     Console::SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    startScreen();
     shipGame();
     system("pause>0");
     return 0;
