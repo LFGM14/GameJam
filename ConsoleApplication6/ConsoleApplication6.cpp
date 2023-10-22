@@ -38,7 +38,7 @@ void Dibujar_horario(int a, int b, int espera) {
         _sleep(espera);
     }
 }
-
+//caca
 void startScreen() {
     Dibujar_horario(0, 0, 10);
     setxy(35, 10);
