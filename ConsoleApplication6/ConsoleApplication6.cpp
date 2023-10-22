@@ -1,11 +1,11 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
 using namespace System;
 using namespace std;
 
-const int SCREEN_WIDTH = 120;
+const int SCREEN_WIDTH = 110;
 const int SCREEN_HEIGHT = 50;
 
 void setxy(float x, int y) {
@@ -48,7 +48,7 @@ void startScreen() {
     setxy(25, 15);
     cout << "-Recolecta las 4 muestras de tierra marciana.";
     setxy(25, 17);
-    cout << "-No choques con los asteroides. Si lo haces, perder�s automaticamente.";
+    cout << "-No choques con los asteroides. Si lo haces, perderas automaticamente.";
     setxy(25, 19);
     cout << "-Tendras naves de velocidades distintas dependiendo de tu partida,";
     setxy(25, 21);
@@ -62,7 +62,7 @@ void credits() {
     setxy(35, 10);
     cout << "Proyecto hecho por: ";
     setxy(25, 13);
-    cout << "-Stephanie V�squez Zamora";
+    cout << "-Stephanie V�squez Zamora";
     setxy(25, 17);
     cout << "-Luis Gonzales Matute";
     system("pause>0");
@@ -155,11 +155,25 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
     cout << " *** ";
 }
 
-bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
-    return ((x >= asteroidX || x >= asteroidX + 1 || x >= asteroidX + 2 || x >= asteroidX + 3) && x <= asteroidX + 4) && ((y >= asteroidY || y >= asteroidY + 1 || y >= asteroidY + 2) && y <= asteroidY + 3);
+void floor(float& x,int y) {
+    setxy(x,y);
+    for (int i = 0; x < SCREEN_WIDTH; i++) {
+        for (int j = 0; j < 2; j++) {
+            cout << char(219);
+        }
+    }
 }
 
-
+bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (x + i >= asteroidX && x + i <= asteroidX + 3 && y + j >= asteroidY && y + j <= asteroidY + 2) {
+                return true;  // Colisión detectada
+            }
+        }
+    }
+    return false;  // No se encontró colisión
+}
 
 void shipGame() {
     float x = 10;
