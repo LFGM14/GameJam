@@ -154,6 +154,16 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
     cout << " *** ";
 }
 
+void floor(float& x, int y) {
+    setxy(x, y);
+    for (int i = 0; x < SCREEN_WIDTH; i++) {
+        for (int j = 0; j > 2; j++) {
+            cout << char(219);
+        }
+    }
+}
+
+
 bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     for (int i = 0; i < 13; i++) {
         for (int j = 0; j < 2; j++) {
@@ -164,6 +174,8 @@ bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     }
     return false;  // No se encontró colisión
 }
+
+
 
 void shipGame() {
     float x = 10;
@@ -176,10 +188,13 @@ void shipGame() {
     int y2 = 15;
     float x3 = 1, dx3 = aleatorio();
     int y3 = 25;
+    float xFloor = 0; int yFloor = 35;
 
     int direction1 = 1;
     int direction2 = 1;
     int direction3 = 1;
+
+    
 
     while (1) {
         delAst(x1, y1);
@@ -190,7 +205,6 @@ void shipGame() {
         astStatic(xEst2, yEst1);
         astStatic(xEst3, yEst2);
         astStatic(xEst4, yEst2);
-
         shipDrawing(x, y);
 
         x1 += dx1 * direction1;
