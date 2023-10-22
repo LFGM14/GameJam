@@ -5,7 +5,7 @@
 using namespace System;
 using namespace std;
 
-const int SCREEN_WIDTH = 110;
+const int SCREEN_WIDTH = 120;
 const int SCREEN_HEIGHT = 50;
 
 void setxy(float x, int y) {
@@ -38,7 +38,7 @@ void Dibujar_horario(int a, int b, int espera) {
         _sleep(espera);
     }
 }
-//caca
+
 void startScreen() {
     Dibujar_horario(0, 0, 10);
     setxy(35, 10);
@@ -220,7 +220,7 @@ void shipGame() {
 int main() {
     Console::CursorVisible = false;
     srand(time(NULL));
-    Console::SetWindowSize(SCREEN_HEIGHT, SCREEN_WIDTH);
+    Console::SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     shipGame();
     system("pause>0");
     return 0;
