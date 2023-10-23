@@ -18,6 +18,55 @@ float aleatorio() {
     return (float)rand() / RAND_MAX;
 }
 
+void CambiarColor(int x) {
+    switch (x) {
+    case 0:
+        Console::ForegroundColor = ConsoleColor::White;
+        break;
+    case 1:
+        Console::ForegroundColor = ConsoleColor::Yellow;
+        break;
+    case 2:
+        Console::ForegroundColor = ConsoleColor::Blue;
+        break;
+    case 3:
+        Console::ForegroundColor = ConsoleColor::Red;
+        break;
+    case 4:
+        Console::ForegroundColor = ConsoleColor::Green;
+        break;
+    case 5:
+        Console::ForegroundColor = ConsoleColor::DarkBlue;
+        break;
+    case 6:
+        Console::ForegroundColor = ConsoleColor::DarkGreen;
+        break;
+    case 7:
+        Console::ForegroundColor = ConsoleColor::DarkCyan;
+        break;
+    case 8:
+        Console::ForegroundColor = ConsoleColor::DarkRed;
+        break;
+    case 9:
+        Console::ForegroundColor = ConsoleColor::DarkMagenta;
+        break;
+    case 10:
+        Console::ForegroundColor = ConsoleColor::DarkYellow;
+        break;
+    case 11:
+        Console::ForegroundColor = ConsoleColor::Gray;
+        break;
+    case 12:
+        Console::ForegroundColor = ConsoleColor::DarkGray;
+        break;
+    case 13:
+        Console::ForegroundColor = ConsoleColor::Cyan;
+        break;
+    case 14:
+        Console::ForegroundColor = ConsoleColor::Magenta;
+        break;
+    }
+
 void Dibujar_horario(int a, int b, int espera) {
     for (int i = a; i <= SCREEN_WIDTH; i++) {
         setxy(i, b);
@@ -103,7 +152,7 @@ void shipMovement(float& x, int& y, float xRandMovement) {
             }
         }
     }
-    setxy(35, SCREEN_HEIGHT - 1);
+    setxy(35, SCREEN_HEIGHT - 2);
     cout << "Velocidad: " << VELOCIDAD_ALEATORIA; // Puedes mostrar la velocidad actual aquí
 }
 
@@ -162,15 +211,15 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
 
 
 void drawGround() {
-    setxy(0, SCREEN_HEIGHT - 2);
-    for (int i = 0; i < SCREEN_WIDTH; i++) {
-        cout << (char)219;
-    }
     setxy(0, SCREEN_HEIGHT - 3);
     for (int i = 0; i < SCREEN_WIDTH; i++) {
         cout << (char)219;
     }
     setxy(0, SCREEN_HEIGHT - 4);
+    for (int i = 0; i < SCREEN_WIDTH; i++) {
+        cout << (char)219;
+    }
+    setxy(0, SCREEN_HEIGHT - 5);
     for (int i = 0; i < SCREEN_WIDTH; i++) {
         cout << (char)30;
     }
@@ -178,11 +227,11 @@ void drawGround() {
 
     // Agregar contadores u otra información que desees mostrar
 
-    setxy(60, SCREEN_HEIGHT - 1);
+    setxy(60, SCREEN_HEIGHT - 2);
 
     cout << "Asteroides: 7"; //contador de asteroides 
 
-    setxy(80, SCREEN_HEIGHT - 1);
+    setxy(80, SCREEN_HEIGHT - 2);
 
     cout << "Tiempo: " << SEGUNDOS << "s"; //contador de tiempo
 
@@ -216,16 +265,7 @@ bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     return false;  // No se encontró colisión
 }
 
-bool checkCollisionSafeZone(float x, float asteroidX, int y, int asteroidY) {
-    for (int i = 0; i < 13; i++) {
-        for (int j = 0; j < 2; j++) {
-            if (x + i >= asteroidX && x + i <= asteroidX + 4 && y + j >= asteroidY && y + j <= asteroidY + 2) {
-                return true;  // Colisión detectada
-            }
-        }
-    }
-    return false;  // No se encontró colisión
-}
+
 
 void shipGame() {
     float x = 10;
@@ -300,7 +340,8 @@ void shipGame() {
         //contador de muestras
         if (checkCollision(x, xSample1, y, ySample)) {
             sampleCounter=1;
-            if (sampleDelivered == 1) {
+            if (checkCollision(x, xSafeZone, y, ySafeZone)) {
+                sampleDelivered == 1;
                 drawSample(xSample2, ySample);
             }
         }
@@ -331,7 +372,9 @@ void shipGame() {
         drawGround();
         //contador de muestras
         setxy(5, SCREEN_HEIGHT - 1);
-        cout << "Muestras recogidas: " << sampleCounter; // Puedes reemplazar esto con el contador real de muestras recolectadas
+        cout << "Muestras recogidas: " << sampleCounter; // CONTADOR DE RECOGIDOS
+        setxy(40, SCREEN_HEIGHT - 1);
+        cout << "Muestras entregadas: " << sampleDelivered; // CONTADOR DE ENTREGADOS
         _sleep(10);
     }
 }
