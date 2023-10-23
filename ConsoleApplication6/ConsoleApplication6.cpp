@@ -378,7 +378,6 @@ void shipGame() {
             case 1:
                 drawSample(xSample3, ySample);
                 sampleDelivered++;
-                sampleCounter++;
                 x = 10;
                 y = 0;
                 loaded = false;
@@ -387,20 +386,12 @@ void shipGame() {
             case 2:
                 drawSample(xSample4, ySample);
                 sampleDelivered++;
-                sampleCounter++;
                 x = 10;
                 y = 0;
                 loaded = false;
                 xSample3 = SCREEN_WIDTH + 1;
                 break;
             case 3:
-                sampleDelivered++;
-                sampleCounter++;
-                x = 10;
-                y = 0;
-                loaded = false;
-                break;
-            default:
                 // para que gane
                 system("cls");
                 setxy(35, 10);
