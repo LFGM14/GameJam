@@ -8,6 +8,7 @@ int MILISEGUNDOS = 0;
 int SEGUNDOS = 0;
 const int SCREEN_WIDTH = 110;
 const int SCREEN_HEIGHT = 40;
+const float VELOCIDAD_ALEATORIA = (float)(rand() % 5 + 1);
 
 void setxy(float x, int y) {
     Console::SetCursorPosition(x, y);
@@ -77,43 +78,43 @@ void delShip(float& x, int& y) {
     cout << "            ";
 }
 
-void shipMovement(float& x, int& y) {
-    float xAceleration = rand() % 5 + 1;
-    float yAceletarion = rand() % 2 + 1;
+void shipMovement(float& x, int& y, float xRandMovement) {
     if (_kbhit()) {
         char c = _getch();
         delShip(x, y);
         if (c == 'a' || c == 'A') {
             if (x > 0) {
-                x-=xAceleration;
+                x-= xRandMovement;
             }
         }
         if (c == 'd' || c == 'D') {
             if (x < SCREEN_WIDTH - 13) {
-                x+=xAceleration;
+                x+= xRandMovement;
             }
         }
         if (c == 's' || c == 'S') {
             if (y < SCREEN_HEIGHT - 2) {
-                y+=yAceletarion;
+                y++;
             }
         }
         if (c == 'w' || c == 'W') {
             if (y > 0) {
-                y-=yAceletarion;
+                y--;
             }
         }
     }
     setxy(35, SCREEN_HEIGHT - 1);
-    cout << "Velocidad: " << xAceleration; // Puedes mostrar la velocidad actual aquí
+    cout << "Velocidad: " << VELOCIDAD_ALEATORIA; // Puedes mostrar la velocidad actual aquí
 }
 
 void shipDrawing(float& x, int& y) {
+    Console::ForegroundColor = ConsoleColor::Magenta;
+    //las Y permanecen constantes para que el movimiento se sienta menos torpe
     setxy(x, y);
     cout << "   __|__";
     setxy(x, y + 1);
     cout << "*---o0o---*";
-    shipMovement(x, y);
+    shipMovement(x, y, VELOCIDAD_ALEATORIA);
 }
 
 void delAst(float& x, int& y) {
@@ -176,10 +177,8 @@ void drawGround() {
 
 
     // Agregar contadores u otra información que desees mostrar
-    setxy(5, SCREEN_HEIGHT - 1);
-    cout << "Muestras: 0/4"; // Puedes reemplazar esto con el contador real de muestras recolectadas
 
-    setxy(70, SCREEN_HEIGHT - 1);
+    setxy(60, SCREEN_HEIGHT - 1);
 
     cout << "Asteroides: 7"; //contador de asteroides 
 
@@ -217,7 +216,16 @@ bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     return false;  // No se encontró colisión
 }
 
-
+bool checkCollisionSafeZone(float x, float asteroidX, int y, int asteroidY) {
+    for (int i = 0; i < 13; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (x + i >= asteroidX && x + i <= asteroidX + 4 && y + j >= asteroidY && y + j <= asteroidY + 2) {
+                return true;  // Colisión detectada
+            }
+        }
+    }
+    return false;  // No se encontró colisión
+}
 
 void shipGame() {
     float x = 10;
@@ -233,16 +241,21 @@ void shipGame() {
     float xFloor = 0; int yFloor = 35;
     float xSample1 = 15, xSample2 = 50, xSample3 = 85, xSample4 = 105; int ySample = SCREEN_HEIGHT - 5;
     int sampleCounter = 0;
+    int sampleDelivered = 0;
+
+    //safeZone hitbox
+    int xSafeZone = 5;
+    int ySafeZone = 3;
 
     int direction1 = 1;
     int direction2 = 1;
     int direction3 = 1;
 
     drawSample(xSample1, ySample);
-    drawSample(xSample2, ySample);
+    /*drawSample(xSample2, ySample);
     drawSample(xSample3, ySample);
-    drawSample(xSample4, ySample);
-
+    drawSample(xSample4, ySample);*/
+    
     while (1) {
         delAst(x1, y1);
         delAst(x2, y2);
@@ -285,10 +298,30 @@ void shipGame() {
             
         }
         //contador de muestras
-        if (checkCollision(x, xSample1, y, ySample) || checkCollision(x, xSample2, y, ySample) || checkCollision(x, xSample3, y, ySample) || checkCollision(x, xSample4, y, ySample)) {
-            sampleCounter++;
+        if (checkCollision(x, xSample1, y, ySample)) {
+            sampleCounter=1;
+            if (sampleDelivered == 1) {
+                drawSample(xSample2, ySample);
+            }
         }
 
+        if (checkCollision(x, xSample2, y, ySample)) {
+            sampleCounter = 2; 
+            if (sampleDelivered == 2) {
+                drawSample(xSample3, ySample);
+            }
+        }
+
+        if (checkCollision(x, xSample3, y, ySample)) {
+            sampleCounter = 3; 
+            if (sampleDelivered == 3) {
+                drawSample(xSample4, ySample);
+            }
+        }
+
+        if (checkCollision(x, xSample4, y, ySample)) {
+            sampleCounter = 4;
+        }
 
         MILISEGUNDOS++;
         if (MILISEGUNDOS == 26) { //es lo más cercano que encontramos a un segundo
@@ -296,6 +329,9 @@ void shipGame() {
             MILISEGUNDOS = 0;
         }
         drawGround();
+        //contador de muestras
+        setxy(5, SCREEN_HEIGHT - 1);
+        cout << "Muestras recogidas: " << sampleCounter; // Puedes reemplazar esto con el contador real de muestras recolectadas
         _sleep(10);
     }
 }
