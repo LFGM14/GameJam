@@ -4,6 +4,7 @@
 #include <windows.h>
 using namespace System;
 using namespace std;
+
 int MILISEGUNDOS = 0;
 int SEGUNDOS = 0;
 const int SCREEN_WIDTH = 110;
@@ -18,54 +19,6 @@ float aleatorio() {
     return (float)rand() / RAND_MAX;
 }
 
-void CambiarColor(int x) {
-    switch (x) {
-    case 0:
-        Console::ForegroundColor = ConsoleColor::White;
-        break;
-    case 1:
-        Console::ForegroundColor = ConsoleColor::Yellow;
-        break;
-    case 2:
-        Console::ForegroundColor = ConsoleColor::Blue;
-        break;
-    case 3:
-        Console::ForegroundColor = ConsoleColor::Red;
-        break;
-    case 4:
-        Console::ForegroundColor = ConsoleColor::Green;
-        break;
-    case 5:
-        Console::ForegroundColor = ConsoleColor::DarkBlue;
-        break;
-    case 6:
-        Console::ForegroundColor = ConsoleColor::DarkGreen;
-        break;
-    case 7:
-        Console::ForegroundColor = ConsoleColor::DarkCyan;
-        break;
-    case 8:
-        Console::ForegroundColor = ConsoleColor::DarkRed;
-        break;
-    case 9:
-        Console::ForegroundColor = ConsoleColor::DarkMagenta;
-        break;
-    case 10:
-        Console::ForegroundColor = ConsoleColor::DarkYellow;
-        break;
-    case 11:
-        Console::ForegroundColor = ConsoleColor::Gray;
-        break;
-    case 12:
-        Console::ForegroundColor = ConsoleColor::DarkGray;
-        break;
-    case 13:
-        Console::ForegroundColor = ConsoleColor::Cyan;
-        break;
-    case 14:
-        Console::ForegroundColor = ConsoleColor::Magenta;
-        break;
-    }
 
 void Dibujar_horario(int a, int b, int espera) {
     for (int i = a; i <= SCREEN_WIDTH; i++) {
@@ -88,24 +41,6 @@ void Dibujar_horario(int a, int b, int espera) {
         cout << (char)219;
         _sleep(espera);
     }
-}
-
-void startScreen() {
-    Dibujar_horario(0, 0, 10);
-    setxy(35, 10);
-    cout << "Marte pero imagina que es Marte";
-    setxy(25, 13);
-    cout << "Instrucciones: ";
-    setxy(25, 15);
-    cout << "-Recolecta las 4 muestras de tierra marciana.";
-    setxy(25, 17);
-    cout << "-No choques con los asteroides. Si lo haces, perderás automáticamente.";
-    setxy(25, 19);
-    cout << "-Tendrás naves de velocidades distintas dependiendo de tu partida,";
-    setxy(25, 21);
-    cout << "utiliza tu velocidad a tu ventaja.";
-    system("pause>0");
-    system("cls");
 }
 
 void credits() {
@@ -133,12 +68,12 @@ void shipMovement(float& x, int& y, float xRandMovement) {
         delShip(x, y);
         if (c == 'a' || c == 'A') {
             if (x > 0) {
-                x-= xRandMovement;
+                x -= xRandMovement;
             }
         }
         if (c == 'd' || c == 'D') {
             if (x < SCREEN_WIDTH - 13) {
-                x+= xRandMovement;
+                x += xRandMovement;
             }
         }
         if (c == 's' || c == 'S') {
@@ -209,7 +144,6 @@ void astDrawing(float& x1, float& x2, float& x3, int& y1, int& y2, int& y3) {
     cout << " *** ";
 }
 
-
 void drawGround() {
     setxy(0, SCREEN_HEIGHT - 3);
     for (int i = 0; i < SCREEN_WIDTH; i++) {
@@ -224,18 +158,10 @@ void drawGround() {
         cout << (char)30;
     }
 
-
-    // Agregar contadores u otra información que desees mostrar
-
     setxy(60, SCREEN_HEIGHT - 2);
-
     cout << "Asteroides: 7"; //contador de asteroides 
-
     setxy(80, SCREEN_HEIGHT - 2);
-
     cout << "Tiempo: " << SEGUNDOS << "s"; //contador de tiempo
-
-    
 }
 
 void drawSafeZone() {
@@ -250,9 +176,8 @@ void drawSafeZone() {
 
 void drawSample(float x, int y) {
     setxy(x, y);
-    cout << (char)15;
+    cout << "**";
 }
-
 
 bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     for (int i = 0; i < 13; i++) {
@@ -265,9 +190,8 @@ bool checkCollision(float x, float asteroidX, int y, int asteroidY) {
     return false;  // No se encontró colisión
 }
 
-
-
 void shipGame() {
+    int lifes = 3; 
     float x = 10;
     int y = 0;
     float xEst1 = 18, xEst2 = 60; int yEst1 = 11;
@@ -279,10 +203,10 @@ void shipGame() {
     float x3 = 1, dx3 = aleatorio();
     int y3 = 25;
     float xFloor = 0; int yFloor = 35;
-    float xSample1 = 15, xSample2 = 50, xSample3 = 85, xSample4 = 105; int ySample = SCREEN_HEIGHT - 5;
+    float xSample1 = 15, xSample2 = 50, xSample3 = 85, xSample4 = 105; int ySample = SCREEN_HEIGHT - 6;
     int sampleCounter = 0;
     int sampleDelivered = 0;
-
+    bool loaded=false;
     //safeZone hitbox
     int xSafeZone = 5;
     int ySafeZone = 3;
@@ -291,11 +215,12 @@ void shipGame() {
     int direction2 = 1;
     int direction3 = 1;
 
+
     drawSample(xSample1, ySample);
     /*drawSample(xSample2, ySample);
     drawSample(xSample3, ySample);
     drawSample(xSample4, ySample);*/
-    
+
     while (1) {
         delAst(x1, y1);
         delAst(x2, y2);
@@ -308,7 +233,6 @@ void shipGame() {
         shipDrawing(x, y);
 
         drawSafeZone();
-
 
         x1 += dx1 * direction1;
         x2 += dx2 * direction2;
@@ -326,42 +250,136 @@ void shipGame() {
             direction3 *= -1;
         }
 
-
-
         astDrawing(x1, x2, x3, y1, y2, y3);
-        
+
+        if (checkCollision(x, xSample1, y, ySample) && (sampleCounter == 0||sampleCounter==1)) {
+            sampleCounter++;
+            loaded = true;
+
+        }
 
         if (checkCollision(x, x1, y, y1) || checkCollision(x, x2, y, y2) || checkCollision(x, x3, y, y3) || checkCollision(x, xEst1, y, yEst1) || checkCollision(x, xEst2, y, yEst1) || checkCollision(x, xEst3, y, yEst2) || checkCollision(x, xEst4, y, yEst2)) {
             // cuando la nave se choque con los asteroides, se regresa a la posición inicial
             x = 10;
             y = 0;
-            
-        }
-        //contador de muestras
-        if (checkCollision(x, xSample1, y, ySample)) {
-            sampleCounter=1;
-            if (checkCollision(x, xSafeZone, y, ySafeZone)) {
-                sampleDelivered == 1;
+            loaded = false;
+            switch (sampleDelivered) {
+            case 0:
+                drawSample(xSample1, ySample);
+                lifes--;
+                break;
+            case 1:
                 drawSample(xSample2, ySample);
-            }
-        }
-
-        if (checkCollision(x, xSample2, y, ySample)) {
-            sampleCounter = 2; 
-            if (sampleDelivered == 2) {
+                lifes--;
+                break;
+            case 2:
                 drawSample(xSample3, ySample);
-            }
-        }
-
-        if (checkCollision(x, xSample3, y, ySample)) {
-            sampleCounter = 3; 
-            if (sampleDelivered == 3) {
+                lifes--;
+                break;
+            case 3:
                 drawSample(xSample4, ySample);
+                lifes--;
+                break;
+            default:
+                break;
             }
+            if (lifes == 0) {
+                // Has perdido
+                system("cls");
+                setxy(35, 10);
+                cout << "¡Has perdido!";
+                setxy(30, 12);
+                cout << "Muestras recogidas: " << sampleCounter;
+                setxy(30, 14);
+                cout << "Muestras entregadas: " << sampleDelivered;
+                setxy(30, 16);
+                cout << "Tiempo: " << SEGUNDOS << "s";
+                setxy(25, 18);
+                cout << "¿Deseas intentarlo de nuevo? (Y/N)";
+                char choice = _getch();
+                if (choice == 'Y' || choice == 'y') {
+                    system("cls");
+                    shipGame();
+                    return;// Vuelve a jugar
+                }
+                else {
+                    return;// vuelva a la pantalla de inicio
+                }
         }
 
-        if (checkCollision(x, xSample4, y, ySample)) {
-            sampleCounter = 4;
+        
+
+        if (checkCollision(x, xSafeZone, y, ySafeZone)&&loaded==true) {
+            switch (sampleDelivered)
+            {
+            case 0:
+                sampleDelivered++;
+                drawSample(xSample2, ySample);
+                x = 10;
+                y = 0;
+                loaded = false;
+                break;
+            case 1:
+                drawSample(xSample3, ySample);
+                sampleDelivered++;
+                sampleCounter++;
+                x = 10;
+                y = 0;
+                loaded = false;
+                break;
+            case 2:
+                drawSample(xSample4, ySample);
+                sampleDelivered++;
+                sampleCounter++;
+                x = 10;
+                y = 0;
+                loaded = false;
+                break;
+            case 3:
+                
+                sampleDelivered++;
+                sampleCounter++;
+                x = 10;
+                y = 0;
+                loaded = false;
+                break;
+            default:
+                    // para que gane
+                    system("cls");
+                    setxy(35, 10);
+                    cout << "¡Felicidades! Has ganado.";
+                    setxy(30, 12);
+                    cout << "Muestras recogidas: " << sampleCounter;
+                    setxy(30, 14);
+                    cout << "Muestras entregadas: " << sampleDelivered;
+                    setxy(30, 16);
+                    cout << "Tiempo: " << SEGUNDOS << "s";
+                    setxy(25, 18);
+                    cout << "¿Deseas jugar de nuevo? (Y/N)";
+                    char choice = _getch();
+                    if (choice == 'Y' || choice == 'y') {
+                        system("cls");
+                        shipGame();
+                        return;// Vuelve a jugar
+                    }
+                    else {
+                        return;// vuelva a la pantalla de inicio
+                    }
+                }
+            }
+
+        }
+        if (checkCollision(x, xSample2, y, ySample) && (sampleCounter == 1||sampleCounter==2) && sampleDelivered == 1) {
+            sampleCounter++;
+            loaded = true;
+        }
+        if (checkCollision(x, xSample3, y, ySample) && (sampleCounter == 3 || sampleCounter == 2) && sampleDelivered == 2) {
+            sampleCounter++;
+            loaded = true;
+        }
+        if (checkCollision(x, xSample4, y, ySample) && (sampleCounter == 3 || sampleCounter == 4) && sampleDelivered == 3) {
+            sampleCounter++;
+            loaded = true;
         }
 
         MILISEGUNDOS++;
@@ -370,12 +388,33 @@ void shipGame() {
             MILISEGUNDOS = 0;
         }
         drawGround();
-        //contador de muestras
+        // para actualiar los contadores
         setxy(5, SCREEN_HEIGHT - 1);
-        cout << "Muestras recogidas: " << sampleCounter; // CONTADOR DE RECOGIDOS
+        cout << "Muestras recogidas: " << sampleCounter;
         setxy(40, SCREEN_HEIGHT - 1);
-        cout << "Muestras entregadas: " << sampleDelivered; // CONTADOR DE ENTREGADOS
+        cout << "Muestras entregadas: " << sampleDelivered;
         _sleep(10);
+    }
+}
+void startScreen() {
+    Dibujar_horario(0, 0, 10);
+    setxy(35, 10);
+    cout << "Marte pero imagina que es Marte";
+    setxy(25, 13);
+    cout << "Instrucciones: ";
+    setxy(25, 15);
+    cout << "-Recolecta las 4 muestras de tierra marciana.";
+    setxy(25, 17);
+    cout << "-No choques con los asteroides. Si lo haces, perderás automáticamente.";
+    setxy(25, 19);
+    cout << "-Tendrás naves de velocidades distintas dependiendo de tu partida,";
+    setxy(25, 21);
+    cout << "utiliza tu velocidad a tu ventaja.";
+    char choice = _getch();
+    if (choice == 'Y' || choice == 'y') {
+        system("cls");
+        shipGame();
+        return;// Vuelve a jugar
     }
 }
 
@@ -384,7 +423,6 @@ int main() {
     srand(time(NULL));
     Console::SetWindowSize(SCREEN_WIDTH, SCREEN_HEIGHT);
     startScreen();
-    shipGame();
     system("pause>0");
     return 0;
 }
